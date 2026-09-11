@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyboard - Find Your Boarding House in Iloilo City</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --accent: #f59e0b;
+            --neutral-light: #f9fafb;
+            --neutral-dark: #1f2937;
+            --border: #e5e7eb;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--neutral-light);
+            color: var(--neutral-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Map Section */
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Listings Section */
+        .listings-section {
+            margin-top: 2rem;
+        }
+
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .listings-header h2 {
+            font-size: 1.5rem;
+            color: var(--neutral-dark);
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .listing-content {
+            padding: 1.5rem;
+        }
+
+        .listing-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--neutral-dark);
+        }
+
+        .listing-address {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .listing-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item {
+            font-size: 0.85rem;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .listing-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-item {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .contact-value {
+            color: var(--primary);
+            word-break: break-all;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--neutral-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--neutral-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--neutral-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-footer button {
+            flex: 1;
+            padding: 0.75rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                width: 100%;
+            }
+
+            .nav-buttons button {
+                flex: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+
+        .empty-state p {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">🏠</div>
+                <span>Cyboard</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="openPostModal()">Post Boarding House</button>
+                <button class="btn-primary" onclick="scrollToListings()">Browse All</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>Find Your Perfect Boarding House</h1>
+            <p>Discover comfortable and affordable boarding houses in Iloilo City</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalListings">0</div>
+                <div class="stat-label">Boarding Houses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Iloilo City</div>
+                <div class="stat-label">Location</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support</div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Map -->
+            <div id="map"></div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <h3>🔍 Search</h3>
+                    <input type="text" class="search-box" id="searchInput" placeholder="Search by name...">
+                </div>
+                <div class="sidebar-card">
+                    <h3>📍 Quick Info</h3>
+                    <p style="font-size: 0.9rem; color: #6b7280;">
+                        Click on any marker on the map to see boarding house details.
+                    </p>
+                </div>
+                <button class="btn-primary" onclick="openPostModal()" style="width: 100%; padding: 0.75rem;">
+                    ➕ Post Your Boarding House
+                </button>
+            </div>
+        </div>
+
+        <!-- Listings Section -->
+        <div class="listings-section">
+            <div class="listings-header">
+                <h2>All Boarding Houses</h2>
+                <span id="listingCount" style="color: #6b7280;">0 listings</span>
+            </div>
+            <div class="listings-grid" id="listingsGrid">
+                <div class="empty-state">
+                    <p>No boarding houses found. Be the first to post one!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Post Your Boarding House</h2>
+                <button class="close-btn" onclick="closePostModal()">✕</button>
+            </div>
+            <form id="postForm" onsubmit="handlePostSubmit(event)">
+                <div class="form-group">
+                    <label>Boarding House Name *</label>
+                    <input type="text" id="bhName" required placeholder="e.g., Cozy Corner Boarding House">
+                </div>
+
+                <div class="form-group">
+                    <label>Address *</label>
+                    <input type="text" id="bhAddress" required placeholder="e.g., 123 Main St, Iloilo City">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Latitude *</label>
+                        <input type="number" id="bhLat" required step="0.0001" placeholder="10.6898">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude *</label>
+                        <input type="number" id="bhLng" required step="0.0001" placeholder="122.5625">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monthly Rate (₱) *</label>
+                        <input type="number" id="bhRate" required placeholder="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>Rooms Available *</label>
+                        <input type="number" id="bhRooms" required placeholder="5">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Landlord Name *</label>
+                    <input type="text" id="landlordName" required placeholder="Your name">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="landlordPhone" required placeholder="09XX-XXX-XXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="landlordEmail" placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="bhDescription" placeholder="Describe your boarding house, amenities, rules, etc."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closePostModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Post Boarding House</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Data Management
+        let boardingHouses = JSON.parse(localStorage.getItem('boardingHouses')) || [
+            {
+                id: 1,
+                name: "Cozy Corner Boarding House",
+                address: "123 Bonifacio St, Iloilo City",
+                lat: 10.6898,
+                lng: 122.5625,
+                rate: 5000,
+                rooms: 8,
+                landlord: "Maria Santos",
+                phone: "0917-123-4567",
+                email: "maria@example.com",
+                description: "Comfortable rooms with WiFi, hot water, and daily housekeeping. Near schools and universities."
+            },
+            {
+                id: 2,
+                name: "Student Haven",
+                address: "456 Mabini Ave, Iloilo City",
+                lat: 10.6920,
+                lng: 122.5650,
+                rate: 4500,
+                rooms: 12,
+                landlord: "Juan Dela Cruz",
+                phone: "0918-234-5678",
+                email: "juan@example.com",
+                description: "Budget-friendly option perfect for students. Common area with TV and kitchen access."
+            },
+            {
+                id: 3,
+                name: "Premium Living Quarters",
+                address: "789 Rizal St, Iloilo City",
+                lat: 10.6850,
+                lng: 122.5600,
+                rate: 7500,
+                rooms: 6,
+                landlord: "Rosa Garcia",
+                phone: "0919-345-6789",
+                email: "rosa@example.com",
+                description: "Upscale boarding house with AC, private bathroom, and 24/7 security."
+            }
+        ];
+
+        let map;
+        let markers = [];
+        let filteredHouses = [...boardingHouses];
+
+        // Initialize Map
+        function initMap() {
+            map = L.map('map').setView([10.6898, 122.5625], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            renderMarkers();
+        }
+
+        // Render Markers
+        function renderMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            filteredHouses.forEach(house => {
+                const marker = L.marker([house.lat, house.lng]).addTo(map);
+                marker.bindPopup(`
+                    <div style="font-weight: bold; margin-bottom: 5px;">${house.name}</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 5px;">${house.address}</div>
+                    <div style="color: #2563eb; font-weight: bold;">₱${house.rate.toLocaleString()}/month</div>
+                    <div style="font-size: 0.85rem; color: #6b7280;">📞 ${house.phone}</div>
+                `);
+                markers.push(marker);
+            });
+        }
+
+        // Render Listings
+        function renderListings() {
+            const grid = document.getElementById('listingsGrid');
+            const count = document.getElementById('listingCount');
+
+            if (filteredHouses.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><p>No boarding houses found.</p></div>';
+                count.textContent = '0 listings';
+                return;
+            }
+
+            grid.innerHTML = filteredHouses.map(house => `
+                <div class="listing-card">
+                    <div class="listing-image">🏠</div>
+                    <div class="listing-content">
+                        <div class="listing-title">${house.name}</div>
+                        <div class="listing-address">📍 ${house.address}</div>
+                        <div class="listing-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rate</div>
+                                <div class="detail-value">₱${house.rate.toLocaleString()}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Rooms</div>
+                                <div class="detail-value">${house.rooms} available</div>
+                            </div>
+                        </div>
+                        <div class="listing-contact">
+                            <div class="contact-item">
+                                <span class="contact-label">👤</span>
+                                <span class="contact-value">${house.landlord}</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">📞</span>
+                                <span class="contact-value">${house.phone}</span>
+                            </div>
+                            ${house.email ? `<div class="contact-item">
+                                <span class="contact-label">✉️</span>
+                                <span class="contact-value">${house.email}</span>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            count.textContent = `${filteredHouses.length} listing${filteredHouses.length !== 1 ? 's' : ''}`;
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('totalListings').textContent = boardingHouses.length;
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filteredHouses = boardingHouses.filter(house =>
+                house.name.toLowerCase().includes(query) ||
+                house.address.toLowerCase().includes(query) ||
+                house.landlord.toLowerCase().includes(query)
+            );
+            renderListings();
+            renderMarkers();
+        });
+
+        // Modal Functions
+        function openPostModal() {
+            document.getElementById('postModal').classList.add('active');
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.remove('active');
+            document.getElementById('postForm').reset();
+        }
+
+        // Handle Form Submit
+        function handlePostSubmit(e) {
+            e.preventDefault();
+
+            const newHouse = {
+                id: Math.max(...boardingHouses.map(h => h.id), 0) + 1,
+                name: document.getElementById('bhName').value,
+                address: document.getElementById('bhAddress').value,
+                lat: parseFloat(document.getElementById('bhLat').value),
+                lng: parseFloat(document.getElementById('bhLng').value),
+                rate: parseInt(document.getElementById('bhRate').value),
+                rooms: parseInt(document.getElementById('bhRooms').value),
+                landlord: document.getElementById('landlordName').value,
+                phone: document.getElementById('landlordPhone').value,
+                email: document.getElementById('landlordEmail').value,
+                description: document.getElementById('bhDescription').value
+            };
+
+            boardingHouses.push(newHouse);
+            filteredHouses = [...boardingHouses];
+            localStorage.setItem('boardingHouses', JSON.stringify(boardingHouses));
+
+            renderListings();
+            renderMarkers();
+            updateStats();
+            closePostModal();
+
+            alert('✅ Boarding house posted successfully!');
+        }
+
+        // Scroll to Listings
+        function scrollToListings() {
+            document.querySelector('.listings-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('postModal').addEventListener('click', (e) => {
+            if (e.target.id === 'postModal') {
+                closePostModal();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initMap();
+            renderListings();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

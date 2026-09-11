@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Express</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>🍽️ Catering Express</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="cart-btn" onclick="toggleCart()">
+                    🛒 Cart <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Premium Catering Services</h2>
+            <p>Delicious food delivered to your doorstep</p>
+            <button class="cta-btn" onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">
+                Order Now
+            </button>
+        </div>
+    </section>
+
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2>Our Menu</h2>
+           
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <button class="filter-btn active" onclick="filterMenu('all')">All</button>
+                <button class="filter-btn" onclick="filterMenu('appetizers')">Appetizers</button>
+                <button class="filter-btn" onclick="filterMenu('mains')">Mains</button>
+                <button class="filter-btn" onclick="filterMenu('desserts')">Desserts</button>
+                <button class="filter-btn" onclick="filterMenu('beverages')">Beverages</button>
+            </div>
+
+
+            <!-- Menu Items Grid -->
+            <div class="menu-grid" id="menuGrid">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>Why Choose Catering Express?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your order delivered within 30-45 minutes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🍳</div>
+                    <h3>Expert Chefs</h3>
+                    <p>Prepared by professional chefs with years of experience</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Quality Ingredients</h3>
+                    <p>We use only the freshest and finest ingredients</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Best Prices</h3>
+                    <p>Competitive pricing with regular discounts and offers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <h3>📞 Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📧 Email</h3>
+                        <p>info@cateringexpress.com</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📍 Address</h3>
+                        <p>123 Food Street, Culinary City, CC 12345</p>
+                    </div>
+                </div>
+                <form class="contact-form" onsubmit="handleContactForm(event)">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Catering Express. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total:</strong>
+                <span id="cartTotal">₱0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="openCheckout()" id="checkoutBtn" disabled>
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCheckout()">✕</button>
+            <h2>Order Details</h2>
+           
+            <form id="checkoutForm" onsubmit="submitOrder(event)">
+                <!-- Customer Information -->
+                <div class="form-section">
+                    <h3>Customer Information</h3>
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                </div>
+
+
+                <!-- Delivery Information -->
+                <div class="form-section">
+                    <h3>Delivery Address</h3>
+                    <div class="form-group">
+                        <label for="address">Street Address *</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipcode">Zip Code *</label>
+                            <input type="text" id="zipcode" name="zipcode" required>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Delivery Time -->
+                <div class="form-section">
+                    <h3>Delivery Preferences</h3>
+                    <div class="form-group">
+                        <label for="deliveryDate">Delivery Date *</label>
+                        <input type="date" id="deliveryDate" name="deliveryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryTime">Delivery Time *</label>
+                        <input type="time" id="deliveryTime" name="deliveryTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialRequests">Special Requests</label>
+                        <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any dietary restrictions or special instructions?"></textarea>
+                    </div>
+                </div>
+
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-options">
+                        <label class="radio-label">
+                            <input type="radio" name="payment" value="credit-card" checked>
+                            Credit Card
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="payment" value="debit-card">
+                            Debit Card
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="payment" value="cash">
+                            Cash on Delivery
+                        </label>
+                    </div>
+                </div>
+
+
+                <!-- Order Summary -->
+                <div class="form-section order-summary">
+                    <h3>Order Summary</h3>
+                    <div id="summaryItems"></div>
+                    <div class="summary-total">
+                        <strong>Total Amount:</strong>
+                        <span id="summaryTotal">₱0.00</span>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="submit-btn">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content receipt-content">
+            <button class="modal-close" onclick="closeReceipt()">✕</button>
+            <div class="receipt">
+                <div class="receipt-header">
+                    <h2>🍽️ Catering Express</h2>
+                    <p>Order Receipt</p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Order Number</h4>
+                    <p id="receiptOrderNumber" class="receipt-highlight"></p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Customer Information</h4>
+                    <p><strong>Name:</strong> <span id="receiptName"></span></p>
+                    <p><strong>Email:</strong> <span id="receiptEmail"></span></p>
+                    <p><strong>Phone:</strong> <span id="receiptPhone"></span></p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Delivery Address</h4>
+                    <p id="receiptAddress"></p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Delivery Schedule</h4>
+                    <p><strong>Date:</strong> <span id="receiptDate"></span></p>
+                    <p><strong>Time:</strong> <span id="receiptTime"></span></p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Order Items</h4>
+                    <table class="receipt-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receiptItems"></tbody>
+                    </table>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Payment Details</h4>
+                    <p><strong>Subtotal:</strong> <span id="receiptSubtotal">₱0.00</span></p>
+                    <p><strong>Delivery Fee:</strong> <span id="receiptDeliveryFee">₱30.00</span></p>
+                    <p><strong>Tax (10%):</strong> <span id="receiptTax">₱0.00</span></p>
+                    <p class="receipt-total"><strong>Total Amount:</strong> <span id="receiptTotalAmount">$0.00</span></p>
+                </div>
+
+
+                <div class="receipt-section">
+                    <h4>Payment Method</h4>
+                    <p id="receiptPaymentMethod"></p>
+                </div>
+
+
+                
+                <div class="receipt-footer">
+                    <p>Thank you for your order!</p>
+                    <p>Estimated delivery time: 30-45 minutes</p>
+                    <p>For support, call: +1 (555) 123-4567</p>
+                </div>
+            </div>
+
+
+            <div class="receipt-actions">
+                <button class="print-btn" onclick="printReceipt()">🖨️ Print Receipt</button>
+                <button class="new-order-btn" onclick="startNewOrder()">New Order</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
+
