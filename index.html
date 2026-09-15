@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CVMB — Portfolio</title>
-<meta name="description" content="Kyle is a student developer in Iloilo, Philippines building small, useful web systems: barangay management, patient tracking, catering, and more.">
+<title>CVMB Porfolio</title>
+<meta name="description" content="Carlium is a student developer in Iloilo, Philippines building small, useful web systems: barangay management, patient tracking, catering, and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="paper-texture" aria-hidden="true"></div>
+  <div class="grid-texture" aria-hidden="true"></div>
 
   <header class="nav-wrap">
     <nav class="nav">
-      <a href="#top" class="nav-mark">Carl Vincent M Bejico<span class="nav-mark-dim">/ dev.log</span></a>
+      <a href="#top" class="nav-mark">Carl Vincent Bejico<span class="nav-mark-dim">@dev</span> <span class="cursor-static">~</span></a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#work" data-nav>Records</a></li>
-        <li><a href="#about" data-nav>Profile</a></li>
-        <li><a href="#skills" data-nav>Toolkit</a></li>
+        <li><a href="#work" data-nav>Projects</a></li>
+        <li><a href="#about" data-nav>About</a></li>
+        <li><a href="#skills" data-nav>Skills</a></li>
         <li><a href="#contact" data-nav>Contact</a></li>
       </ul>
     </nav>
@@ -32,25 +32,20 @@
   <main>
     <!-- HERO -->
     <section class="hero" id="top">
-      <div class="hero-tag">
-        <span class="hero-tag-label">File No.</span>
-        <span class="hero-tag-num">000</span>
-      </div>
-
+      <p class="hero-eyebrow">Student developer · Iloilo, PH</p>
       <h1 class="hero-title">
-        A running log of systems
-        <span class="hero-underline">built to keep things in order<svg class="scribble" viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 60 4, 120 20, 180 8 S 260 2, 298 12" fill="none" stroke-width="2" stroke-linecap="round"/></svg></span>
+        I build small systems
+        <span class="hero-underline">that solve real problems<svg class="scribble" viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 60 4, 120 20, 180 8 S 260 2, 298 12" fill="none" stroke-width="4" stroke-linecap="round"/></svg></span>
       </h1>
+      <p class="hero-sub">I'm jepjep. I design and build practical web applications — records systems, trackers, and tools people actually use — while I learn the craft.</p>
 
-      <p class="hero-sub">I'm Carl, a student developer in Iloilo, Philippines. I design and build the unglamorous systems that keep records straight — resident files, patient charts, catering orders — while I learn the craft.</p>
-
-      <div class="hero-ledger" role="status" aria-live="polite">
-        <span class="ledger-mark">status —</span>
-        <span class="ledger-line" id="terminalLine"></span><span class="ledger-cursor" aria-hidden="true"></span>
+      <div class="terminal" role="status" aria-live="polite">
+        <span class="terminal-prompt">&gt;</span>
+        <span class="terminal-line" id="terminalLine"></span><span class="terminal-cursor" aria-hidden="true"></span>
       </div>
 
       <div class="hero-actions">
-        <a href="#work" class="btn btn-primary">Open the records</a>
+        <a href="#work" class="btn btn-primary">See the work</a>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
       </div>
     </section>
@@ -58,39 +53,34 @@
     <!-- WORK -->
     <section class="work" id="work">
       <div class="section-head reveal">
-        <span class="section-tag">Records — 001</span>
-        <h2>Projects on file.</h2>
-        <p class="section-desc">Each entry below is a small system, built and shipped. Sorted as filed.</p>
+        <span class="section-tag">//My Projects</span>
+        <h2>A collection of my web development projects.</h2>
       </div>
 
-      <div class="record-list">
-        <a class="record reveal" href="nayki/index.html">
-          <div class="record-visual">
+      <div class="project-list">
+        <a class="project reveal" href="nayki/index.html">
+          <div class="project-visual" style="--tint:#e3a13c;">
             <img src="img/firstproject.jpeg" alt="Nayki athletic gear website screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">01</span>
-              <span class="record-path">/work/nayki</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/nayki</span>
             </div>
             <h3>Nayki</h3>
-            <p>A storefront concept for athletes who demand performance, stability, and durability during every workout — HTML and CSS only, no framework.</p>
+            <p>A storefront concept built for athletes who demand performance, stability, and durability during every workout — HTML and CSS only, no framework.</p>
             <ul class="tag-list">
               <li>html</li><li>css</li><li>js</li>
             </ul>
           </div>
         </a>
 
-        <a class="record reveal" href="brgy/admin/login.php">
-          <div class="record-visual">
+        <a class="project reveal" href="brgy/admin/login.php">
+          <div class="project-visual" style="--tint:#4f8f7f;">
             <img src="img/bms.jpeg" alt="Barangay Management System screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">02</span>
-              <span class="record-path">/work/bms</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/bms</span>
             </div>
             <h3>BMS — Barangay Management System</h3>
             <p>Simplifies the management of barangay records, resident information, and document processing for local government staff.</p>
@@ -100,15 +90,13 @@
           </div>
         </a>
 
-        <a class="record reveal" href="cyboard/index.html">
-          <div class="record-visual">
+        <a class="project reveal" href="cyboard/index.html">
+          <div class="project-visual" style="--tint:#c1573a;">
             <img src="img/cyboard.jpeg" alt="Cyboard boarding house finder screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">03</span>
-              <span class="record-path">/work/cyboard</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/cyboard</span>
             </div>
             <h3>Cyboard</h3>
             <p>A boarding house finder that helps users search available rooms, view details, and contact landlords directly.</p>
@@ -118,15 +106,13 @@
           </div>
         </a>
 
-        <a class="record reveal" href="patienttracker/index.html">
-          <div class="record-visual">
+        <a class="project reveal" href="patienttracker/index.html">
+          <div class="project-visual" style="--tint:#e3a13c;">
             <img src="img/patient_tracker.jpeg" alt="Patient Tracker system screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">04</span>
-              <span class="record-path">/work/patient-tracker</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/patient-tracker</span>
             </div>
             <h3>Patient Tracker</h3>
             <p>A patient management system for storing records, tracking appointments, and managing patient information.</p>
@@ -136,15 +122,13 @@
           </div>
         </a>
 
-        <a class="record reveal" href="profitt/index.html">
-          <div class="record-visual">
+        <a class="project reveal" href="profitt/index.html">
+          <div class="project-visual" style="--tint:#4f8f7f;">
             <img src="img/profit_radar.jpeg" alt="Profit Radar tracking dashboard screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">05</span>
-              <span class="record-path">/work/profit-radar</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/profit-radar</span>
             </div>
             <h3>Profit Radar</h3>
             <p>A profit tracking system that helps small businesses monitor sales, expenses, and overall financial performance.</p>
@@ -154,15 +138,13 @@
           </div>
         </a>
 
-        <a class="record reveal" href="cater/index.html">
-          <div class="record-visual">
+        <a class="project reveal" href="cater/index.html">
+          <div class="project-visual" style="--tint:#c1573a;">
             <img src="img/cater.jpeg" alt="Catering system screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">06</span>
-              <span class="record-path">/work/catering-system</span>
-              <span class="record-stamp">filed</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/catering-system</span>
             </div>
             <h3>Catering System</h3>
             <p>A food ordering and catering management system — customers place orders while businesses manage menus, bookings, and requests.</p>
@@ -172,20 +154,18 @@
           </div>
         </a>
 
-        <a class="record reveal" href="taskmanager/task-manager-php/login.php">
-          <div class="record-visual">
+        <a class="project reveal" href="taskmanager/task-manager-php/index.php">
+          <div class="project-visual" style="--tint:#c1573a;">
             <img src="img/taskmanager.jpeg" alt="Task manager screenshot" loading="lazy">
           </div>
-          <div class="record-body">
-            <div class="record-head">
-              <span class="record-no">07</span>
-              <span class="record-path">/work/task-manager</span>
-              <span class="record-stamp record-stamp-pending">pending</span>
+          <div class="project-info">
+            <div class="project-meta">
+              <span class="project-path">/work/task-manager</span>
             </div>
-            <h3>Task Manager</h3>
+            <h3>Task manager</h3>
             <p>A task management system that helps users organize tasks, track progress, and manage deadlines efficiently.</p>
             <ul class="tag-list">
-              <li>html</li><li>css</li><li>js</li><li>php</li>
+              <li>html</li><li>css</li><li>js</li>
             </ul>
           </div>
         </a>
@@ -195,26 +175,17 @@
     <!-- ABOUT -->
     <section class="about" id="about">
       <div class="about-grid">
-        <div class="about-head reveal">
-          <span class="section-tag">Profile — 002</span>
+        <div class="reveal">
+          <span class="section-tag">// about</span>
           <h2>Still learning, building anyway.</h2>
         </div>
         <div class="about-copy reveal">
           <p>I'm a student developer who enjoys creating simple, useful, and user-friendly web applications. I'm continuously learning new technologies and improving my programming and problem-solving skills.</p>
           <p>My goal is to gain real experience by building projects that help people, while expanding my knowledge of web development and software engineering.</p>
-        </div>
-        <div class="about-card reveal">
-          <div class="about-card-row">
-            <span>role</span>
-            <strong>Student developer</strong>
-          </div>
-          <div class="about-card-row">
-            <span>currently learning</span>
-            <strong>HTML, CSS, Python, PHP</strong>
-          </div>
-          <div class="about-card-row">
-            <span>goal</span>
-            <strong>Build useful applications</strong>
+          <div class="about-facts">
+            <div><span>role</span><strong>Student developer</strong></div>
+            <div><span>currently learning</span><strong>HTML, CSS, Python, PHP</strong></div>
+            <div><span>goal</span><strong>Build useful applications</strong></div>
           </div>
         </div>
       </div>
@@ -223,32 +194,27 @@
     <!-- SKILLS -->
     <section class="skills" id="skills">
       <div class="section-head reveal">
-        <span class="section-tag">Toolkit — 003</span>
-        <h2>What I reach for.</h2>
+        <span class="section-tag">// toolkit</span>
+        <h2>What I reach for</h2>
       </div>
-      <div class="skills-grid">
-        <div class="skill-group reveal">
-          <span class="skill-no">01</span>
+      <div class="skills-grid reveal">
+        <div class="skill-group">
           <h4>front-end/</h4>
           <p>HTML, CSS, Bootstrap</p>
         </div>
-        <div class="skill-group reveal">
-          <span class="skill-no">02</span>
+        <div class="skill-group">
           <h4>back-end/</h4>
           <p>Python, PHP, Node.js</p>
         </div>
-        <div class="skill-group reveal">
-          <span class="skill-no">03</span>
+        <div class="skill-group">
           <h4>design/</h4>
           <p>Figma, prototyping</p>
         </div>
-        <div class="skill-group reveal">
-          <span class="skill-no">04</span>
+        <div class="skill-group">
           <h4>tooling/</h4>
-          <p>GitHub, Vercel and VS Code</p>
+          <p>GitHub, Vercel and VsCode</p>
         </div>
-        <div class="skill-group reveal">
-          <span class="skill-no">05</span>
+        <div class="skill-group">
           <h4>soft-skills/</h4>
           <p>Communication, time management, teamwork, problem solving</p>
         </div>
@@ -258,10 +224,10 @@
     <!-- CONTACT -->
     <section class="contact" id="contact">
       <div class="contact-inner reveal">
-        <span class="section-tag">Contact — 004</span>
+        <span class="section-tag">// contact</span>
         <h2>Let's connect.</h2>
         <p>I'm a student who enjoys learning web development and building small, real projects. Reach out by email or find me on socials below.</p>
-        <a href="mailto:carlciumiii@gmail.com" class="contact-email">carlciumiii@gmail.com</a>
+        <a href="carlciumiii@gmail.com" class="contact-email">carlciumiii,@gmail.com</a>
         <div class="socials">
           <a href="#">GitHub</a>
           <a href="#">LinkedIn</a>
@@ -272,7 +238,7 @@
   </main>
 
   <footer class="footer">
-    <p>© <span id="year"></span> Carl. Built with HTML, CSS &amp; JS.</p>
+    <p>© <span id="year"></span> Carlcium. Built with HTML, CSS &amp; JS.</p>
     <button id="toTop" class="to-top" aria-label="Back to top">↑</button>
   </footer>
 
